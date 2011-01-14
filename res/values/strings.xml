@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">mypomodoro</string>
+	<string name="create">Create Activity</string>
+	<string name="invalid_pomodoros_number">Invalid number of pomodoros</string>
+	<string name="invalid_form_input">Fields Place and Name should not be blank</string>
+</resources>
