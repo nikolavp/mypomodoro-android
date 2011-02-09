@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/create_menu_item" android:icon="@drawable/create_button"
+		android:title="Create" />
+	<item android:id="@+id/todosheet_menu_item" android:icon="@drawable/sheet"
+		android:title="Sheets" />
+	<item android:id="@+id/pomodor_menu_item" android:icon="@drawable/pomodoro"
+		android:title="Pomodoro" />
+</menu>
