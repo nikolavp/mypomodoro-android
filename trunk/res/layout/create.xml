@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical">
+	<EditText android:text="@string/place" android:id="@+id/placeTextField"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+	<EditText android:text="@string/activity_name" android:id="@+id/activityNameTextField"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+	<EditText android:text="@string/description" android:id="@+id/activityDescription"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:lines="3" />
+	<EditText android:text="@string/estimated_poms" android:id="@+id/activityEstimatedPomodoros"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+	<Button android:text="@string/create" android:id="@+id/createButton"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+</LinearLayout>
