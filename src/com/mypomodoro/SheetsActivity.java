@@ -1,12 +1,18 @@
 package com.mypomodoro;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TabHost;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 
@@ -20,6 +26,8 @@ public class SheetsActivity extends PomodoroActivity implements
 	private static final String TODO = "todo";
 	private static final String UNPLANNED = "unplanned";
 	private static final String URGENT = "urgent";
+
+	private static final int ITEM_SELECTED_DIALOG = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +73,14 @@ public class SheetsActivity extends PomodoroActivity implements
 	@Override
 	public View createTabContent(String tag) {
 		ListView list = new ListView(this);
-		
+
+		list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view,
+					int position, long id) {
+				showDialog(ITEM_SELECTED_DIALOG);
+			}
+		});
 		if (TODO.equals(tag)) {
 			initSheet(list, TaskType.NORMAL);
 		} else if (URGENT.equals(tag)) {
@@ -76,5 +91,36 @@ public class SheetsActivity extends PomodoroActivity implements
 			throw new IllegalArgumentException("Unsupported tag name");
 		}
 		return list;
+	}
+
+	private final OnClickListener onClickListener = new OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			if (which == 0) {
+				// TODO: Start edit activity
+			} else if (which == 1) {
+				// TODO: Start the pomodoro activity
+			}
+		}
+	};
+
+	@Override
+	protected Dialog onCreateDialog(int id, Bundle args) {
+		if (id == ITEM_SELECTED_DIALOG) {
+			String[] items = getResources().getStringArray(
+					R.array.item_selected_action);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder
+			.setTitle(getString(R.string.item_clicked_action_title))
+			.setItems(items, onClickListener)
+			.setNegativeButton(getString(R.string.cancel), new OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			builder.show();
+		}
+		return null;
 	}
 }

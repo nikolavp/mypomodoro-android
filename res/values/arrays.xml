@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string-array name="item_selected_action">
+		<item>@string/edit</item>
+		<item>@string/set_for_pomodoro</item>
+	</string-array>
 	<string-array name="task_type_array">
 		<item>@string/normal_type</item>
 		<item>@string/urgent_type</item>
