@@ -69,37 +69,7 @@ public class SheetsActivity extends PomodoroActivity implements
 	@Override
 	public View createTabContent(String tag) {
 		ListView list = new ListView(this);
-		list.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				System.out.println("Item with " + arg3 + " clicked");
-			}
-		});
-
-		list.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				System.out.println("Item with " + arg3 + " selected");
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-
-		list.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				System.out.println("Item with " + arg3 + " long clicked");
-				return false;
-			}
-		});
+		
 		if (TODO.equals(tag)) {
 			initSheet(list, TaskType.NORMAL);
 		} else if (URGENT.equals(tag)) {
