@@ -5,6 +5,7 @@
 	<string name="create">Create Activity</string>
 	<string name="invalid_pomodoros_number">Invalid number of pomodoros</string>
 	<string name="invalid_form_input">Field Name should not be blank</string>
+	<string name="activity_saved">Activity saved</string>
 	<string name="urgent">Urgent</string>
 	<string name="todo">Todo</string>
 	<string name="unplanned">Unplanned</string>
