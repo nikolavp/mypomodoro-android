@@ -42,7 +42,7 @@ public class CreateForm extends PomodoroActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.create);
 
-		Button createButton = (Button) findViewById(R.id.create_button);
+		Button createButton = (Button) findViewById(R.id.stub);
 		nameField = (EditText) findViewById(R.id.task_name);
 		deadlineField = (EditText) findViewById(R.id.task_deadline_date);
 		deadlineField.setOnClickListener(new OnClickListener() {
