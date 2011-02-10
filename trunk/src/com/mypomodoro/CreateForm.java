@@ -63,8 +63,9 @@ public class CreateForm extends PomodoroActivity {
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		Calendar calendar = Calendar.getInstance();
+		
 		if (id == DATE_PICKER_DIALOG) {
+			Calendar calendar = Calendar.getInstance();
 			return new DatePickerDialog(this, dateSetListener, calendar
 					.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar
 					.get(Calendar.DAY_OF_MONTH));
