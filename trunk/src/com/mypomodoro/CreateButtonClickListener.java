@@ -45,7 +45,8 @@ public class CreateButtonClickListener implements OnClickListener {
 		TaskDao taskDao = new TaskDao(helper);
 		try {
 			taskDao.save(task);
-			Toast.makeText(form, "Activity saved", 1000).show();
+			Toast.makeText(form, form.getString(R.string.activity_saved), 1000)
+					.show();
 			form.clear();
 		} finally {
 			taskDao.closeQuietly();
