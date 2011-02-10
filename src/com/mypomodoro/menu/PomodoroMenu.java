@@ -1,10 +1,15 @@
-package com.mypomodoro;
+package com.mypomodoro.menu;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.mypomodoro.CreateForm;
+import com.mypomodoro.PomodoroTimerActivity;
+import com.mypomodoro.R;
+import com.mypomodoro.SheetsActivity;
 
 public class PomodoroMenu {
 	private final Activity activity;
@@ -28,7 +33,7 @@ public class PomodoroMenu {
 		case R.id.create_menu_item:
 			return fireActivityClass(CreateForm.class);
 		case R.id.todosheet_menu_item:
-			return fireActivityClass(TodoSheetActivity.class);
+			return fireActivityClass(SheetsActivity.class);
 		case R.id.pomodor_menu_item:
 			return fireActivityClass(PomodoroTimerActivity.class);
 		default:
