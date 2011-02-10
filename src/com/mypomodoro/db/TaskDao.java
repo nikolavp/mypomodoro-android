@@ -53,6 +53,16 @@ public class TaskDao implements Closeable {
 	}
 
 	/**
+	 * Load a task from the database.
+	 * 
+	 * @param taskID
+	 *            name of the task to be loaded.
+	 */
+	public Task load(int taskID) {
+		return null;
+	}
+
+	/**
 	 * Close the dao without throwing exceptions to the caller.
 	 */
 	public void closeQuietly() {
