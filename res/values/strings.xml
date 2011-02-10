@@ -3,6 +3,7 @@
 
 	<string name="app_name">mypomodoro</string>
 	<string name="create">Create Activity</string>
+	<string name="edit">Edit Activity</string>
 	<string name="invalid_pomodoros_number">Invalid number of pomodoros</string>
 	<string name="invalid_form_input">Field Name should not be blank</string>
 	<string name="invalid_deadline_input">Invalid deadline provided</string>
@@ -19,7 +20,6 @@
 	<string name="urgent_type">Urgent</string>
 	<string name="normal_type">Normal</string>
 	<string name="unplanned_type">Unplanned</string>
-	<string name="edit">Edit</string>
 	<string name="set_for_pomodoro">Set as pomodoro task</string>
 	<string name="cancel">Cancel</string>
 	<string name="item_clicked_action_title">What to do with the clicked item</string>

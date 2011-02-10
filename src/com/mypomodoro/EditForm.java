@@ -6,13 +6,20 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewStub;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-public class CreateForm extends PomodoroActivity {
+/**
+ * An activity that should fire up when the user selects a name of a task so he
+ * can edit it's info.
+ * 
+ * @author nikolavp
+ * 
+ */
+public class EditForm extends PomodoroActivity {
 	EditText nameField;
 	EditText estimatedPomodorosField;
 	EditText deadlineField;
@@ -20,14 +27,12 @@ public class CreateForm extends PomodoroActivity {
 	private static int DATE_PICKER_DIALOG = 0;
 
 	private final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(year, monthOfYear, dayOfMonth);
 			updateDisplay(calendar);
 		}
-
 	};
 
 	private void updateDisplay(Calendar calendar) {
@@ -43,9 +48,9 @@ public class CreateForm extends PomodoroActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.form);
 
-		((ViewStub) findViewById(R.id.create_button_stub)).inflate();
+		((ViewStub) findViewById(R.id.edit_button_stub)).inflate();
 
-		Button createButton = (Button) findViewById(R.id.create_button);
+		Button createButton = (Button) findViewById(R.id.edit_button);
 		nameField = (EditText) findViewById(R.id.task_name);
 		deadlineField = (EditText) findViewById(R.id.task_deadline_date);
 		deadlineField.setOnClickListener(new OnClickListener() {
@@ -55,7 +60,7 @@ public class CreateForm extends PomodoroActivity {
 			}
 		});
 		estimatedPomodorosField = (EditText) findViewById(R.id.task_estimated_pomodoros);
-		createButton.setOnClickListener(new CreateButtonClickListener(this));
+		createButton.setOnClickListener(new EditButtonClickListener(this));
 	}
 
 	void clear() {
@@ -66,12 +71,11 @@ public class CreateForm extends PomodoroActivity {
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		
+		Calendar calendar = Calendar.getInstance();
 		if (id == DATE_PICKER_DIALOG) {
-			Calendar calendar = Calendar.getInstance();
-			return new DatePickerDialog(this, dateSetListener, calendar
-					.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar
-					.get(Calendar.DAY_OF_MONTH));
+			return new DatePickerDialog(this, dateSetListener,
+					calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.DAY_OF_MONTH));
 		}
 		return null;
 	}
