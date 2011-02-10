@@ -4,12 +4,17 @@
 	<string name="app_name">mypomodoro</string>
 	<string name="create">Create Activity</string>
 	<string name="invalid_pomodoros_number">Invalid number of pomodoros</string>
-	<string name="invalid_form_input">Fields Place and Name should not be blank</string>
+	<string name="invalid_form_input">Field Name should not be blank</string>
 	<string name="urgent">Urgent</string>
 	<string name="todo">Todo</string>
-	<string name="activities">Activities</string>
+	<string name="unplanned">Unplanned</string>
 	<string name="estimated_poms">Estimated Pomodoros</string>
-	<string name="description">Description</string>
+	<string name="pick_deadline_date">Pick deadline date</string>
+
 	<string name="activity_name">Activity name</string>
-	<string name="place">Place</string>
+
+	<string name="task_type_prompt">Enter task type</string>
+	<string name="urgent_type">Urgent</string>
+	<string name="normal_type">Normal</string>
+	<string name="unplanned_type">Unplanned</string>
 </resources>

@@ -10,12 +10,15 @@
 		<FrameLayout android:id="@android:id/tabcontent"
 			android:paddingTop="66dp" android:layout_width="fill_parent"
 			android:layout_height="fill_parent">
+			<!-- 
 			<ListView android:id="@+id/todosheet" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" />
 			<ListView android:id="@+id/urgent" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" />
 			<ListView android:id="@+id/activities" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" />
+		
+			 -->
 		</FrameLayout>
 	</TabHost>
 	<LinearLayout android:orientation="horizontal"
