@@ -2,11 +2,14 @@ package com.mypomodoro.db;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Calendar;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import com.mypomodoro.data.Task;
+import com.mypomodoro.data.TaskType;
 
 /**
  * A dao that will provide an abstractions for common operations with the
@@ -59,7 +62,45 @@ public class TaskDao implements Closeable {
 	 *            name of the task to be loaded.
 	 */
 	public Task load(int taskID) {
-		return null;
+		Cursor cursor = null;
+		try {
+			cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME, new String[] {
+					Task.NAME, Task.DEADLINE, Task.TYPE,
+					Task.ESTIMATED_POMODOROS }, "id = " + taskID, null, null,
+					null, null);
+			if (cursor != null) {
+				cursor.moveToFirst();
+			}
+			Task task = new Task();
+			int estimated = cursor.getInt(cursor
+					.getColumnIndex(Task.ESTIMATED_POMODOROS));
+			String name = cursor.getString(cursor.getColumnIndex(Task.NAME));
+			int type = cursor.getInt(cursor.getColumnIndex(Task.TYPE));
+			long deadline = cursor
+					.getLong(cursor.getColumnIndex(Task.DEADLINE));
+
+			task.setName(name);
+			task.setType(getType(type));
+			task.setEstimatedPomodoros(estimated);
+			Calendar deadlineCalendar = Calendar.getInstance();
+			deadlineCalendar.setTimeInMillis(deadline);
+			task.setDeadline(deadlineCalendar.getTime());
+			return task;
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+	}
+
+	private TaskType getType(int type) {
+		if (type == 0) {
+			return TaskType.NORMAL;
+		} else if (type == 1) {
+			return TaskType.URGENT;
+		} else {
+			return TaskType.UNPLANNED;
+		}
 	}
 
 	/**

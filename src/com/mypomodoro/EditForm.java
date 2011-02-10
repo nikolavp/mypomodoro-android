@@ -2,9 +2,6 @@ package com.mypomodoro;
 
 import java.util.Calendar;
 
-import com.mypomodoro.db.PomodoroDatabaseHelper;
-import com.mypomodoro.db.TaskDao;
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -14,6 +11,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+
+import com.mypomodoro.db.PomodoroDatabaseHelper;
+import com.mypomodoro.db.TaskDao;
 
 /**
  * An activity that should fire up when the user selects a name of a task so he
@@ -45,10 +45,11 @@ public class EditForm extends PomodoroActivity {
 				.append(calendar.get(Calendar.MONTH) + 1).append("-")
 				.append(calendar.get(Calendar.YEAR)).append(""));
 	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Bundle extras = getIntent().getExtras();
+		System.out.println("Extras from edit form " + extras.get(SheetsActivity.TASK_ID));	
 		setContentView(R.layout.form);
 
 		((ViewStub) findViewById(R.id.edit_button_stub)).inflate();
