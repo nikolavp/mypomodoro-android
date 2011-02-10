@@ -66,7 +66,7 @@ public class TaskDao implements Closeable {
 		try {
 			cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME, new String[] {
 					Task.NAME, Task.DEADLINE, Task.TYPE,
-					Task.ESTIMATED_POMODOROS }, "id = " + taskID, null, null,
+					Task.ESTIMATED_POMODOROS }, Task._ID + " = " + taskID, null, null,
 					null, null);
 			if (cursor != null) {
 				cursor.moveToFirst();
@@ -115,6 +115,7 @@ public class TaskDao implements Closeable {
 
 	@Override
 	public void close() throws IOException {
+		insertStatement.close();
 		db.close();
 	}
 }

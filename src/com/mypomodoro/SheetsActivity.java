@@ -83,7 +83,7 @@ public class SheetsActivity extends PomodoroActivity implements
 			public void onItemClick(AdapterView<?> adapterView, View view,
 					int position, long id) {
 				Bundle bundle = new Bundle();
-				bundle.putLong(TASK_ID, id);
+				bundle.putInt(TASK_ID, (int) id);
 				showDialog(ITEM_SELECTED_DIALOG, bundle);
 			}
 		});
@@ -107,7 +107,7 @@ public class SheetsActivity extends PomodoroActivity implements
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(getString(R.string.item_clicked_action_title))
 					.setItems(items,
-							new ItemAction(this, args.getLong(TASK_ID)))
+							new ItemAction(this, args.getInt(TASK_ID)))
 					.setNegativeButton(getString(R.string.cancel),
 							new OnClickListener() {
 								@Override
@@ -122,10 +122,10 @@ public class SheetsActivity extends PomodoroActivity implements
 	}
 
 	private static class ItemAction implements OnClickListener {
-		private final long id;
+		private final int id;
 		private final Context context;
 
-		public ItemAction(Context context, long id) {
+		public ItemAction(Context context, int id) {
 			this.id = id;
 			this.context = context;
 		}
