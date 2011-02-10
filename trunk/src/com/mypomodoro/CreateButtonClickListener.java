@@ -1,12 +1,14 @@
 package com.mypomodoro;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
+import java.util.Date;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.mypomodoro.data.Task;
 import com.mypomodoro.db.PomodoroDatabaseHelper;
+import com.mypomodoro.db.TaskDao;
 
 public class CreateButtonClickListener implements OnClickListener {
 	private final CreateForm form;
@@ -17,7 +19,7 @@ public class CreateButtonClickListener implements OnClickListener {
 
 	@Override
 	public void onClick(View arg0) {
-		Integer estimatedPomodoros = null;
+		int estimatedPomodoros = -1;
 		try {
 			estimatedPomodoros = Integer.parseInt(form.estimatedPomodorosField
 					.getText().toString());
@@ -28,33 +30,26 @@ public class CreateButtonClickListener implements OnClickListener {
 			return;
 		}
 		String name = form.nameField.getText().toString();
-		String place = form.placeField.getText().toString();
-		if (name.length() == 0 || place.length() == 0) {
+		if (name.length() == 0) {
 			Toast.makeText(form, form.getString(R.string.invalid_form_input),
 					1000).show();
 			return;
 		}
-		Toast.makeText(form, "Activity saved", 1000).show();
-		form.clear();
 
-		PomodoroDatabaseHelper dbHelper = new PomodoroDatabaseHelper(
-				form);
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		SQLiteStatement statement = db.compileStatement(INSERT);
-		statement.bindString(1, "sadsadas");
-		statement.bindString(2, "sadasd");
-		statement.executeInsert();
-		System.out.println("Saved");
-		System.out.println(INSERT);
-		db.close();
-		// TODO: Activity saving is not implemented yet.
-		// Activity activity = new Activity(place, null, name, null, null,
-		// estimatedPomodoros);
-		// ActivitiesDAO.getInstance().insert(activity);
+		Task task = new Task();
+		task.setDateCreated(new Date());
+		task.setEstimatedPomodoros(estimatedPomodoros);
+		task.setName(name);
+
+		PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(form);
+		TaskDao taskDao = new TaskDao(helper);
+		try {
+			taskDao.save(task);
+			Toast.makeText(form, "Activity saved", 1000).show();
+			form.clear();
+		} finally {
+			taskDao.closeQuietly();
+		}
+
 	}
-	
-	private static final String INSERT = "INSERT INTO " + PomodoroDatabaseHelper.TABLE_NAME
- + " ("
-			+ PomodoroDatabaseHelper.NAME + ", "
-			+ PomodoroDatabaseHelper.ESTIMATED + ") values (?, ?)";
 }
