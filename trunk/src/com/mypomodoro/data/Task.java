@@ -5,6 +5,11 @@ import java.util.Date;
 public class Task {
 	public static final String NAME = "name";
 	public static final String _ID = "_id";
+	public static final String TYPE = "type";
+
+	public static final String DEADLINE = "deadline";
+	public static final String ESTIMATED_POMODOROS = "estimated";
+	
 	
 	private String name;
 	private TaskType type;

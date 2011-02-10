@@ -1,11 +1,11 @@
 package com.mypomodoro.menu;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.mypomodoro.Activities;
 import com.mypomodoro.CreateForm;
 import com.mypomodoro.PomodoroTimerActivity;
 import com.mypomodoro.R;
@@ -21,11 +21,7 @@ public class PomodoroMenu {
 	}
 
 	private boolean fireActivityClass(Class<?> clazz) {
-		Intent intent = new Intent(activity, clazz);
-		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
-				| Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		activity.startActivity(intent);
-		return true;
+		return Activities.fireActivityClass(activity, clazz);
 	}
 
 	public boolean selectItem(MenuItem item) {

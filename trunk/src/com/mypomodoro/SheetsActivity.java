@@ -2,7 +2,9 @@ package com.mypomodoro;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,6 +30,8 @@ public class SheetsActivity extends PomodoroActivity implements
 	private static final String URGENT = "urgent";
 
 	private static final int ITEM_SELECTED_DIALOG = 0;
+
+	public static final String TASK_ID = "TASK_ID";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +82,9 @@ public class SheetsActivity extends PomodoroActivity implements
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view,
 					int position, long id) {
-				showDialog(ITEM_SELECTED_DIALOG);
+				Bundle bundle = new Bundle();
+				bundle.putLong(TASK_ID, id);
+				showDialog(ITEM_SELECTED_DIALOG, bundle);
 			}
 		});
 		if (TODO.equals(tag)) {
@@ -93,34 +99,47 @@ public class SheetsActivity extends PomodoroActivity implements
 		return list;
 	}
 
-	private final OnClickListener onClickListener = new OnClickListener() {
+	@Override
+	protected Dialog onCreateDialog(int id, final Bundle args) {
+		if (id == ITEM_SELECTED_DIALOG) {
+			String[] items = getResources().getStringArray(
+					R.array.item_selected_action);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(getString(R.string.item_clicked_action_title))
+					.setItems(items,
+							new ItemAction(this, args.getLong(TASK_ID)))
+					.setNegativeButton(getString(R.string.cancel),
+							new OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+								}
+							});
+			builder.show();
+		}
+		return null;
+	}
+
+	private static class ItemAction implements OnClickListener {
+		private final long id;
+		private final Context context;
+
+		public ItemAction(Context context, long id) {
+			this.id = id;
+			this.context = context;
+		}
+
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			if (which == 0) {
-				// TODO: Start edit activity
+				Intent intent = new Intent(context,
+						EditForm.class);
+				intent.putExtra(TASK_ID, id);
+				context.startActivity(intent);
 			} else if (which == 1) {
 				// TODO: Start the pomodoro activity
 			}
 		}
 	};
-
-	@Override
-	protected Dialog onCreateDialog(int id, Bundle args) {
-		if (id == ITEM_SELECTED_DIALOG) {
-			String[] items = getResources().getStringArray(
-					R.array.item_selected_action);
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder
-			.setTitle(getString(R.string.item_clicked_action_title))
-			.setItems(items, onClickListener)
-			.setNegativeButton(getString(R.string.cancel), new OnClickListener(){
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-			builder.show();
-		}
-		return null;
-	}
 }
