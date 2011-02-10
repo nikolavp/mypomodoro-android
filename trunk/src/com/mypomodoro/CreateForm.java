@@ -57,6 +57,7 @@ public class CreateForm extends PomodoroActivity {
 
 	void clear() {
 		nameField.setText("");
+		deadlineField.setText("");
 		estimatedPomodorosField.setText("");
 	}
 
