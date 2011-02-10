@@ -15,7 +15,6 @@ public class PomodoroDatabaseHelper extends SQLiteOpenHelper {
 			+ "type INTEGER NOT NULL, "
 			+ "dealine INTEGER, "
 			+ "date_created INTEGER NOT NULL, "
-			+ "deadline INTEGER, "
 			+ "estimated INTEGER " + ");";
 	public static final String DATABASE_NAME = "mypomodoro";
 
