@@ -46,12 +46,16 @@ public class SheetsActivity extends PomodoroActivity implements
 	private ListView urgetList;
 
 	private ListView unplannedList;
-
+	private SQLiteDatabase db;
+	private PomodoroDatabaseHelper helper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sheet);
+
+		helper = new PomodoroDatabaseHelper(this);
+		db = helper.getReadableDatabase();
 
 		host = (TabHost) findViewById(R.id.tabhost);
 		host.setup();
@@ -109,18 +113,15 @@ public class SheetsActivity extends PomodoroActivity implements
 	 * @return
 	 */
 	private SimpleCursorAdapter getSheetAdapter(TaskType type) {
-		PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(this);
-		SQLiteDatabase db = helper.getReadableDatabase();
-		try {
-			Cursor cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME,
-					new String[] { Task._ID, Task.NAME }, "type = '"
-							+ type.toString() + "'", null, null, null, null);
-			System.out.println(cursor.getCount());
-			return new SimpleCursorAdapter(this, R.layout.list_item, cursor,
-					from, to);
-		} finally {
-			db.close();
-		}
+		Cursor cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME,
+				new String[] { Task._ID, Task.NAME }, "type = '"
+						+ type.toString() + "'", null, null, null, null);
+//		System.out.println(cursor.getCount());
+		startManagingCursor(cursor);
+
+		return new SimpleCursorAdapter(this, R.layout.list_item, cursor, from,
+				to);
+
 	}
 
 	@Override
@@ -205,4 +206,10 @@ public class SheetsActivity extends PomodoroActivity implements
 			context.startActivity(intent);
 		}
 	};
+	
+	@Override
+	protected void onDestroy() {
+		helper.close();
+		db.close();
+	}
 }

@@ -1,7 +1,6 @@
 package com.mypomodoro;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.view.View;
@@ -15,9 +14,7 @@ import com.mypomodoro.db.TaskDao;
 
 public class CreateButtonClickListener implements OnClickListener {
 	private final CreateForm form;
-	private static final SimpleDateFormat dateFormatter = new SimpleDateFormat(
-			"dd-MM-yyyy");
-
+	
 	/**
 	 * Ctor
 	 * 
@@ -54,7 +51,7 @@ public class CreateButtonClickListener implements OnClickListener {
 
 		if (deadline.length() != 0) {
 			try {
-				task.setDeadline(dateFormatter.parse(deadline));
+				task.setDeadline(Dates.DATE_FORMATTER.parse(deadline));
 			} catch (ParseException e) {
 				Toast.makeText(form,
 						form.getString(R.string.invalid_deadline_input), 1000)
