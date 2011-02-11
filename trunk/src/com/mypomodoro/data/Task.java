@@ -23,6 +23,7 @@ public class Task {
 
 	public static final String DEADLINE = "deadline";
 	public static final String ESTIMATED_POMODOROS = "estimated";
+	public static final String ACTUAL_POMODOROS = "actual_pomodoros";
 	
 	
 	private String name;
@@ -30,6 +31,25 @@ public class Task {
 	private Date deadline;
 	private Date dateCreated;
 	private int estimatedPomodoros;
+	private int actualPomodoros;
+	
+	private int id;
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getActualPomodoros() {
+		return actualPomodoros;
+	}
+
+	public void setActualPomodoros(int actualPomodoros) {
+		this.actualPomodoros = actualPomodoros;
+	}
 
 	public Task() {
 		this.type = TaskType.NORMAL;

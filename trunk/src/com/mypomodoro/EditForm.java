@@ -42,6 +42,8 @@ public class EditForm extends PomodoroActivity {
 			updateDisplay(calendar);
 		}
 	};
+	private PomodoroDatabaseHelper helper;
+	private TaskDao taskDao;
 
 	private void updateDisplay(Calendar calendar) {
 		deadlineField.setText(Dates.DATE_FORMATTER.format(calendar.getTime()));
@@ -50,11 +52,16 @@ public class EditForm extends PomodoroActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.form);
 		
+		
+		helper = new PomodoroDatabaseHelper(this);
+		taskDao = new TaskDao(helper);
 		
 		spentPreffix = getString(R.string.pomodoros_spent);
 		Bundle intentExtras = getIntent().getExtras();
-		setContentView(R.layout.form);
+		int taskId = intentExtras.getInt(SheetsActivity.TASK_ID);
+		
 		((ViewStub) findViewById(R.id.edit_button_stub)).inflate();
 
 		Button editButton = (Button) findViewById(R.id.edit_button);
@@ -70,18 +77,17 @@ public class EditForm extends PomodoroActivity {
 
 		Spinner typeSpinner = (Spinner) findViewById(R.id.task_type_spinner);
 		estimatedPomodorosField = (EditText) findViewById(R.id.task_estimated_pomodoros);
-		editButton.setOnClickListener(new EditButtonClickListener(this));
+		Task task = taskDao.load(taskId);
+		
+		editButton.setOnClickListener(new EditButtonClickListener(task, this));
 
-		PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(this);
-
-		TaskDao taskDao = new TaskDao(helper);
-		Task task = taskDao.load(intentExtras.getInt(SheetsActivity.TASK_ID));
 
 		nameField.setText(task.getName());
 		Date deadline = task.getDeadline();
 		if (deadline != null) {
 			deadlineField.setText(Dates.DATE_FORMATTER.format(deadline));
 		}
+		pomodorosSpentField.setText(spentPreffix + task.getActualPomodoros());
 		estimatedPomodorosField.setText("" + task.getEstimatedPomodoros());
 		typeSpinner.setSelection(task.getType().ordinal());
 	}
@@ -103,4 +109,10 @@ public class EditForm extends PomodoroActivity {
 		return null;
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		helper.close();
+		taskDao.closeQuietly();
+	}
 }

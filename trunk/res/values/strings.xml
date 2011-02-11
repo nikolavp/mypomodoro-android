@@ -8,6 +8,7 @@
 	<string name="invalid_form_input">Field Name should not be blank</string>
 	<string name="invalid_deadline_input">Invalid deadline provided</string>
 	<string name="activity_saved">Activity saved</string>
+	<string name="activity_edited">Activity edited</string>
 	<string name="urgent">Urgent</string>
 	<string name="todo">Todo</string>
 	<string name="unplanned">Unplanned</string>
@@ -26,7 +27,8 @@
 	<string name="start">Start</string>
 	<string name="stop">Stop</string>
 	<string name="no_task_name_selected">No task selected</string>
-	<string name="double_tasks_error">Error! Wanted to start two tasks at the same time</string>
+	<string name="double_tasks_error">Error! Wanted to start two tasks at the same time
+	</string>
 	<string name="pomodoros_spent">Pomodoros Spent: </string>
 
 </resources>

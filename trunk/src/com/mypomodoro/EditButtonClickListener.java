@@ -1,7 +1,5 @@
 package com.mypomodoro;
 
-import java.util.Date;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -12,9 +10,11 @@ import com.mypomodoro.db.TaskDao;
 
 public class EditButtonClickListener implements OnClickListener {
 	private final EditForm form;
+	private final Task task;
 
-	public EditButtonClickListener(EditForm form) {
+	public EditButtonClickListener(Task task, EditForm form) {
 		this.form = form;
+		this.task = task;
 	}
 
 	@Override
@@ -36,18 +36,15 @@ public class EditButtonClickListener implements OnClickListener {
 			return;
 		}
 
-		Task task = new Task();
-		task.setDateCreated(new Date());
 		task.setEstimatedPomodoros(estimatedPomodoros);
 		task.setName(name);
 
 		PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(form);
 		TaskDao taskDao = new TaskDao(helper);
 		try {
-			taskDao.save(task);
-			Toast.makeText(form, form.getString(R.string.activity_saved), 1000)
+			taskDao.update(task);
+			Toast.makeText(form, form.getString(R.string.activity_edited), 1000)
 					.show();
-			form.clear();
 		} finally {
 			helper.close();
 			taskDao.closeQuietly();
