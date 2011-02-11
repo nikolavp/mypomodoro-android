@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.mypomodoro.data.Task;
 
 public class PomodoroDatabaseHelper extends SQLiteOpenHelper {
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 2;
+	
 	public static final String TABLE_NAME = "tasks";
 	public static final String CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME + "( "
 			+ Task._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -15,7 +16,9 @@ public class PomodoroDatabaseHelper extends SQLiteOpenHelper {
 			+ Task.TYPE + " VARCHAR(10) NOT NULL, "
 			+ Task.DEADLINE + " INTEGER, "
 			+ "date_created INTEGER NOT NULL, "
-			+ Task.ESTIMATED_POMODOROS + " INTEGER " + ");";
+			+ Task.ESTIMATED_POMODOROS + " INTEGER, "
+			+ Task.ACTUAL_POMODOROS + " INTEGER "
+			+");";
 	public static final String DATABASE_NAME = "mypomodoro";
 
 	public PomodoroDatabaseHelper(Context context) {
@@ -27,8 +30,10 @@ public class PomodoroDatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_SQL);
 	}
 	
+	
 	@Override
-	public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
-
+	public void onUpgrade(SQLiteDatabase db, int s, int x) {
+		db.delete(TABLE_NAME, null, null);
+		onCreate(db);
 	}
 }

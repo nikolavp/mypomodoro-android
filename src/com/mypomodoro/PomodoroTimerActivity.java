@@ -21,9 +21,13 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 	private static final int SECOND = 1000;
 	private static final int MINUTES = 60 * SECOND;
 	private static final long POMODORO_LENGTH = 25 * MINUTES;
+//	private static final long POMODORO_LENGTH = 1 * MINUTES;
 	private static final long POMODORO_SHORT_BREAK_LENGTH = 5 * MINUTES;
 	private static final long POMODORO_LONG_BREAK_LENGTH = POMODORO_SHORT_BREAK_LENGTH * 5;
 
+	PomodoroDatabaseHelper helper;
+	TaskDao taskDao;
+	
 	private TextView taskName;
 	private TextView timerText;
 	private long time = POMODORO_LENGTH;
@@ -49,10 +53,7 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		public void run() {
 			if (time >= 1) {
 				time -= SECOND;
-				updateTimer();
-				handler.postDelayed(this, SECOND);
 			} else {
-				//TODO: Change the Task actual pomodoro numbers
 				if (isInPomodoro()) {
 					if (i > 3) {
 						goInLongBreak();
@@ -62,10 +63,13 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 						goInShortBreak();
 					}
 					inpomodoro = false;
+					taskDao.incrementPomodoros(currentTaskId);
 				} else {
 					goInPomodoro();
 				}
 			}
+			updateTimer();
+			handler.postDelayed(this, SECOND);
 		}
 
 		private void goInShortBreak() {
@@ -84,6 +88,9 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+		helper = new PomodoroDatabaseHelper(this);
+		taskDao = new TaskDao(helper);
 		
 		timerText = (TextView) findViewById(R.id.pomodoro_timer);
 		taskName = (TextView) findViewById(R.id.pomodoro_task_name);
@@ -164,5 +171,11 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		Editor edit = getPreferences(MODE_PRIVATE).edit();
 		edit.putInt(SheetsActivity.TASK_ID, currentTaskId);
 		edit.commit();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
 	}
 }

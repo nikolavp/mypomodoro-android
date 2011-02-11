@@ -116,6 +116,7 @@ public class SheetsActivity extends PomodoroActivity implements
 		Cursor cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME,
 				new String[] { Task._ID, Task.NAME }, "type = '"
 						+ type.toString() + "'", null, null, null, null);
+		Log.d("database", cursor.getCount() + " records loaded from database.");
 		startManagingCursor(cursor);
 
 		return new SimpleCursorAdapter(this, R.layout.list_item, cursor, from,
@@ -208,6 +209,7 @@ public class SheetsActivity extends PomodoroActivity implements
 	
 	@Override
 	protected void onDestroy() {
+		super.onDestroy();
 		helper.close();
 		db.close();
 	}
