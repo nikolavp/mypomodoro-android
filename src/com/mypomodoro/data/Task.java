@@ -2,9 +2,23 @@ package com.mypomodoro.data;
 
 import java.util.Date;
 
+/**
+ * A Task entity that will work represent a task in the database.
+ * @author nikolavp
+ *
+ */
 public class Task {
+	/**
+	 * Name string field for the tasks in the database
+	 */
 	public static final String NAME = "name";
+	/**
+	 * ID string field for the tasks in the database.
+	 */
 	public static final String _ID = "_id";
+	/**
+	 * TYPE string field for the tasks in the database.
+	 */
 	public static final String TYPE = "type";
 
 	public static final String DEADLINE = "deadline";

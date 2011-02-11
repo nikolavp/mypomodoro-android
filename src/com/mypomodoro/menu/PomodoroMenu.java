@@ -20,10 +20,25 @@ public class PomodoroMenu {
 		inflater.inflate(R.menu.main_menu, menu);
 	}
 
+	/**
+	 * Fire an activity from the current context.
+	 * 
+	 * @param clazz
+	 *            the activity that should be started.
+	 * @return true on success and false otherwise.
+	 * @see Activities#fireActivityClass(android.content.Context, Class)
+	 */
 	private boolean fireActivityClass(Class<?> clazz) {
 		return Activities.fireActivityClass(activity, clazz);
 	}
 
+	/**
+	 * Fire an action for the selected/specified {@link MenuItem}
+	 * 
+	 * @param item
+	 *            the item that was selected.
+	 * @return boolean on success and false otherwise.
+	 */
 	public boolean selectItem(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.create_menu_item:

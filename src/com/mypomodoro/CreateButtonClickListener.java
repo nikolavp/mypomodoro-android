@@ -15,13 +15,18 @@ import com.mypomodoro.db.TaskDao;
 
 public class CreateButtonClickListener implements OnClickListener {
 	private final CreateForm form;
+	private static final SimpleDateFormat dateFormatter = new SimpleDateFormat(
+			"dd-MM-yyyy");
 
+	/**
+	 * Ctor
+	 * 
+	 * @param form
+	 *            the form that will be used to create that new activity.
+	 */
 	public CreateButtonClickListener(CreateForm form) {
 		this.form = form;
 	}
-
-	private static final SimpleDateFormat dateFormatter = new SimpleDateFormat(
-			"dd-MM-yyyy");
 
 	@Override
 	public void onClick(View arg0) {
@@ -42,12 +47,10 @@ public class CreateButtonClickListener implements OnClickListener {
 			return;
 		}
 		String deadline = form.deadlineField.getText().toString();
-		
 
 		Task task = new Task();
 		task.setType(TaskType.valueOf(form.type.toUpperCase()));
 		task.setDateCreated(new Date());
-
 
 		if (deadline.length() != 0) {
 			try {
@@ -62,6 +65,11 @@ public class CreateButtonClickListener implements OnClickListener {
 		task.setEstimatedPomodoros(estimatedPomodoros);
 		task.setName(name);
 
+		saveTask(task);
+
+	}
+
+	private void saveTask(Task task) {
 		PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(form);
 		TaskDao taskDao = new TaskDao(helper);
 		try {
@@ -73,6 +81,5 @@ public class CreateButtonClickListener implements OnClickListener {
 			helper.close();
 			taskDao.closeQuietly();
 		}
-
 	}
 }
