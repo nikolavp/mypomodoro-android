@@ -116,7 +116,6 @@ public class SheetsActivity extends PomodoroActivity implements
 		Cursor cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME,
 				new String[] { Task._ID, Task.NAME }, "type = '"
 						+ type.toString() + "'", null, null, null, null);
-//		System.out.println(cursor.getCount());
 		startManagingCursor(cursor);
 
 		return new SimpleCursorAdapter(this, R.layout.list_item, cursor, from,
@@ -200,7 +199,7 @@ public class SheetsActivity extends PomodoroActivity implements
 			if (which == 0) {
 				intent = new Intent(context, EditForm.class);
 			} else if (which == 1) {
-				intent = new Intent(context, PomodoroTimerActivity.class);
+				intent = Activities.getIntentForClass(context, PomodoroTimerActivity.class);
 			}
 			intent.putExtra(TASK_ID, id);
 			context.startActivity(intent);

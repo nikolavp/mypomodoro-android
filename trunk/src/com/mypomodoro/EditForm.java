@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.mypomodoro.data.Task;
 import com.mypomodoro.db.PomodoroDatabaseHelper;
@@ -30,6 +31,7 @@ public class EditForm extends PomodoroActivity {
 	EditText estimatedPomodorosField;
 	EditText deadlineField;
 
+	String spentPreffix;
 	private static int DATE_PICKER_DIALOG = 0;
 
 	private final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -42,22 +44,20 @@ public class EditForm extends PomodoroActivity {
 	};
 
 	private void updateDisplay(Calendar calendar) {
-		deadlineField.setText(new StringBuilder()
-				// Month is 0 based so add 1
-				.append(calendar.get(Calendar.DAY_OF_MONTH)).append("-")
-				.append(calendar.get(Calendar.MONTH) + 1).append("-").append(
-						calendar.get(Calendar.YEAR)).append(""));
+		deadlineField.setText(Dates.DATE_FORMATTER.format(calendar.getTime()));
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		
+		spentPreffix = getString(R.string.pomodoros_spent);
 		Bundle intentExtras = getIntent().getExtras();
 		setContentView(R.layout.form);
 		((ViewStub) findViewById(R.id.edit_button_stub)).inflate();
 
-		Button createButton = (Button) findViewById(R.id.edit_button);
+		Button editButton = (Button) findViewById(R.id.edit_button);
 		nameField = (EditText) findViewById(R.id.task_name);
 		deadlineField = (EditText) findViewById(R.id.task_deadline_date);
 		deadlineField.setOnClickListener(new OnClickListener() {
@@ -66,12 +66,14 @@ public class EditForm extends PomodoroActivity {
 				showDialog(DATE_PICKER_DIALOG);
 			}
 		});
+		TextView pomodorosSpentField = (TextView) findViewById(R.id.actual_pomodoros_edit_view);
+
 		Spinner typeSpinner = (Spinner) findViewById(R.id.task_type_spinner);
 		estimatedPomodorosField = (EditText) findViewById(R.id.task_estimated_pomodoros);
-		createButton.setOnClickListener(new EditButtonClickListener(this));
+		editButton.setOnClickListener(new EditButtonClickListener(this));
 
 		PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(this);
-		
+
 		TaskDao taskDao = new TaskDao(helper);
 		Task task = taskDao.load(intentExtras.getInt(SheetsActivity.TASK_ID));
 
@@ -80,7 +82,7 @@ public class EditForm extends PomodoroActivity {
 		if (deadline != null) {
 			deadlineField.setText(Dates.DATE_FORMATTER.format(deadline));
 		}
-		estimatedPomodorosField.setText(""+task.getEstimatedPomodoros());
+		estimatedPomodorosField.setText("" + task.getEstimatedPomodoros());
 		typeSpinner.setSelection(task.getType().ordinal());
 	}
 

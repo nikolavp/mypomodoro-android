@@ -55,6 +55,7 @@ public class TaskDao implements Closeable {
 		insertStatement.execute();
 	}
 
+	
 	/**
 	 * Load a task from the database.
 	 * 
