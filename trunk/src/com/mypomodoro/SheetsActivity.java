@@ -28,8 +28,15 @@ public class SheetsActivity extends PomodoroActivity implements
 		TabContentFactory {
 
 	private static final int ITEM_SELECTED_DIALOG = 0;
+	public static final String TASK_ID = "TASK_ID";
 
-	private static final String[] from = new String[] { "name" };
+	/**
+	 * From fields for every task item in the database
+	 */
+	private static final String[] from = new String[] { Task.NAME };
+	/**
+	 * Map the from fields to this array of view ids.
+	 */
 	private static final int[] to = new int[] { R.id.task_item_name };
 
 	private TabHost host;
@@ -40,7 +47,6 @@ public class SheetsActivity extends PomodoroActivity implements
 
 	private ListView unplannedList;
 
-	public static final String TASK_ID = "TASK_ID";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,12 @@ public class SheetsActivity extends PomodoroActivity implements
 		});
 	}
 
+	/**
+	 * This will reinstatiate the cursor for this tabTag and refresh the whole
+	 * content in it.
+	 * 
+	 * @param tabTag
+	 */
 	private void refreshTab(String tabTag) {
 		TaskType sheetType = TaskType.valueOf(tabTag);
 		if (sheetType == TaskType.NORMAL) {
@@ -90,6 +102,12 @@ public class SheetsActivity extends PomodoroActivity implements
 		refreshTab(host.getCurrentTabTag());
 	}
 
+	/**
+	 * Gets the sheet cursor adapter for this type of tasks.
+	 * 
+	 * @param type
+	 * @return
+	 */
 	private SimpleCursorAdapter getSheetAdapter(TaskType type) {
 		PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(this);
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -159,6 +177,13 @@ public class SheetsActivity extends PomodoroActivity implements
 		return null;
 	}
 
+	/**
+	 * Action class that will fire the class that was selected with the dialog
+	 * on every item from the list.
+	 * 
+	 * @author nikolavp
+	 * 
+	 */
 	private static class ItemAction implements OnClickListener {
 		private final int id;
 		private final Context context;
@@ -170,13 +195,14 @@ public class SheetsActivity extends PomodoroActivity implements
 
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
+			Intent intent = null;
 			if (which == 0) {
-				Intent intent = new Intent(context, EditForm.class);
-				intent.putExtra(TASK_ID, id);
-				context.startActivity(intent);
+				intent = new Intent(context, EditForm.class);
 			} else if (which == 1) {
-				// TODO: Start the pomodoro activity
+				intent = new Intent(context, PomodoroTimerActivity.class);
 			}
+			intent.putExtra(TASK_ID, id);
+			context.startActivity(intent);
 		}
 	};
 }

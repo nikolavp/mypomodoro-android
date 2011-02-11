@@ -37,7 +37,7 @@ public class TaskDao implements Closeable {
 	}
 
 	/**
-	 * Save a task to the database.
+	 * Save a task object to the database.
 	 * 
 	 * @param task
 	 *            the task to be saved.
@@ -59,7 +59,9 @@ public class TaskDao implements Closeable {
 	 * Load a task from the database.
 	 * 
 	 * @param taskID
-	 *            name of the task to be loaded.
+	 *            _id of the task to be loaded.
+	 * 
+	 * @see Task#_ID
 	 */
 	public Task load(int taskID) {
 		Cursor cursor = null;

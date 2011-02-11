@@ -26,7 +26,6 @@ public class CreateForm extends PomodoroActivity {
 	private static int DATE_PICKER_DIALOG = 0;
 
 	private final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
 			Calendar calendar = Calendar.getInstance();
@@ -36,6 +35,10 @@ public class CreateForm extends PomodoroActivity {
 
 	};
 
+	/**
+	 * Update the deadline field.
+	 * @param calendar a calendar from which it will extract the info.
+	 */
 	private void updateDisplay(Calendar calendar) {
 		deadlineField.setText(new StringBuilder()
 				// Month is 0 based so add 1
@@ -77,6 +80,9 @@ public class CreateForm extends PomodoroActivity {
 		createButton.setOnClickListener(new CreateButtonClickListener(this));
 	}
 
+	/**
+	 * Clear the fields of the form.
+	 */
 	void clear() {
 		nameField.setText("");
 		deadlineField.setText("");

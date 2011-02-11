@@ -49,11 +49,7 @@ public class EditForm extends PomodoroActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Bundle extras = getIntent().getExtras();
-		System.out.println("Extras from edit form "
-				+ extras.get(SheetsActivity.TASK_ID));
 		setContentView(R.layout.form);
-
 		((ViewStub) findViewById(R.id.edit_button_stub)).inflate();
 
 		Button createButton = (Button) findViewById(R.id.edit_button);

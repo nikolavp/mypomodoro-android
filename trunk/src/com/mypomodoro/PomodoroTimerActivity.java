@@ -3,6 +3,8 @@ package com.mypomodoro;
 import java.text.SimpleDateFormat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -29,6 +31,7 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 	private Button startButton;
 
 	private boolean inpomodoro;
+	private int currentTaskId;
 
 	public boolean isInPomodoro() {
 		return inpomodoro;
@@ -108,23 +111,27 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		setIntent(intent);
 	}
 
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		Bundle extras = getIntent().getExtras();
+		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 		if (extras != null) {
-			int taskId = extras.getInt(SheetsActivity.TASK_ID);
+			currentTaskId = extras.getInt(SheetsActivity.TASK_ID);
+		} else {
+			currentTaskId = preferences.getInt(SheetsActivity.TASK_ID, -1);
+		}
+		if (currentTaskId != -1) {
 			PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(this);
 			TaskDao taskDao = new TaskDao(helper);
 			try {
-				Task task = taskDao.load(taskId);
+				Task task = taskDao.load(currentTaskId);
 				taskName.setText(task.getName());
 			} finally {
 				helper.close();
 				taskDao.closeQuietly();
 			}
-		}else{
-			//TODO: Try to get the activity from last time from the storage.
 		}
 	}
 
@@ -137,5 +144,13 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		time = POMODORO_LENGTH;
 		handler.post(runnable);
 		canStart(false);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Editor edit = getPreferences(MODE_PRIVATE).edit();
+		edit.putInt(SheetsActivity.TASK_ID, currentTaskId);
+		edit.commit();
 	}
 }
