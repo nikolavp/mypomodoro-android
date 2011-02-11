@@ -121,8 +121,8 @@ public class SheetsActivity extends PomodoroActivity implements
 	 */
 	private SimpleCursorAdapter getSheetAdapter(TaskType type) {
 		Cursor cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME,
-				new String[] { Task._ID, Task.NAME },
-				"type = '" + type.toString() + "'", null, null, null, null);
+				new String[] { Task._ID, Task.NAME }, "type = '"
+						+ type.toString() + "'", null, null, null, null);
 		Log.d("database", cursor.getCount() + " records loaded from database.");
 		startManagingCursor(cursor);
 
@@ -169,7 +169,8 @@ public class SheetsActivity extends PomodoroActivity implements
 			String[] items = getResources().getStringArray(
 					R.array.item_selected_action);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(getString(R.string.item_clicked_action_title))
+			builder
+					.setTitle(getString(R.string.item_clicked_action_title))
 					.setItems(items, new ItemAction(this, args.getInt(TASK_ID)))
 					.setNegativeButton(getString(R.string.cancel),
 							new OnClickListener() {
@@ -214,7 +215,11 @@ public class SheetsActivity extends PomodoroActivity implements
 				PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(
 						context);
 				TaskDao taskDao = new TaskDao(helper);
-				taskDao.delete(id);
+				try {
+					taskDao.delete(id);
+				} finally {
+					taskDao.closeQuietly();
+				}
 				context.refreshCurrentTab();
 			}
 			if (fireIntent) {
