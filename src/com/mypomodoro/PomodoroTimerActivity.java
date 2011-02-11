@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -136,6 +135,8 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		}
 		if (!taskDao.exist(currentTaskId)) {
 			currentTaskId = -1;
+			taskName.setText(R.string.no_task_name_selected);
+			voidPomodoro();
 		}
 		if (currentTaskId != -1) {
 			PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(this);
