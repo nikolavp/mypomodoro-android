@@ -101,6 +101,9 @@ public class SheetsActivity extends PomodoroActivity implements
 		Log.i(SheetsActivity.class.getName(), "Refreshing tab " + tabTag);
 	}
 
+	/**
+	 * Refresh the current tab.
+	 */
 	private void refreshCurrentTab() {
 		refreshTab(host.getCurrentTabTag());
 	}
