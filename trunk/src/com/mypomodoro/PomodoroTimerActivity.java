@@ -19,13 +19,19 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 	private Button stopButton;
 	private Button startButton;
 
+	private void updateTimer() {
+		text.setText(format.format(time));
+	}
+	
 	private final Runnable runnable = new Runnable() {
 		@Override
 		public void run() {
 			time -= SECOND;
-			text.setText(format.format(time));
+			updateTimer();
 			handler.postDelayed(this, SECOND);
 		}
+
+		
 	};
 
 	private static final SimpleDateFormat format = new SimpleDateFormat("mm:ss");
@@ -50,18 +56,15 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 			public void onClick(View v) {
 				handler.removeCallbacks(runnable);
 				time = POMODORO_LENGTH;
+				updateTimer();
 				canStart(true);
 			}
 		});
 	}
 	
-	private void canStart(boolean started){
-		startButton.setEnabled(false);
-		stopButton.setEnabled(true);
-	}
-	
-	private void goInBreak(){
-		canStart(true);
+	private void canStart(boolean canStart){
+		startButton.setEnabled(canStart);
+		stopButton.setEnabled(!canStart);
 	}
 	
 	private void goInPomodoro(){
