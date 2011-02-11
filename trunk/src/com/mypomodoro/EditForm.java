@@ -42,14 +42,16 @@ public class EditForm extends PomodoroActivity {
 		deadlineField.setText(new StringBuilder()
 				// Month is 0 based so add 1
 				.append(calendar.get(Calendar.DAY_OF_MONTH)).append("-")
-				.append(calendar.get(Calendar.MONTH) + 1).append("-")
-				.append(calendar.get(Calendar.YEAR)).append(""));
+				.append(calendar.get(Calendar.MONTH) + 1).append("-").append(
+						calendar.get(Calendar.YEAR)).append(""));
 	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle extras = getIntent().getExtras();
-		System.out.println("Extras from edit form " + extras.get(SheetsActivity.TASK_ID));	
+		System.out.println("Extras from edit form "
+				+ extras.get(SheetsActivity.TASK_ID));
 		setContentView(R.layout.form);
 
 		((ViewStub) findViewById(R.id.edit_button_stub)).inflate();
@@ -65,7 +67,7 @@ public class EditForm extends PomodoroActivity {
 		});
 		estimatedPomodorosField = (EditText) findViewById(R.id.task_estimated_pomodoros);
 		createButton.setOnClickListener(new EditButtonClickListener(this));
-		
+
 		populateFields();
 	}
 
@@ -79,9 +81,9 @@ public class EditForm extends PomodoroActivity {
 	protected Dialog onCreateDialog(int id) {
 		Calendar calendar = Calendar.getInstance();
 		if (id == DATE_PICKER_DIALOG) {
-			return new DatePickerDialog(this, dateSetListener,
-					calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-					calendar.get(Calendar.DAY_OF_MONTH));
+			return new DatePickerDialog(this, dateSetListener, calendar
+					.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar
+					.get(Calendar.DAY_OF_MONTH));
 		}
 		return null;
 	}

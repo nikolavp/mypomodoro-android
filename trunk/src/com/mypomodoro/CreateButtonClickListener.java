@@ -70,6 +70,7 @@ public class CreateButtonClickListener implements OnClickListener {
 					.show();
 			form.clear();
 		} finally {
+			helper.close();
 			taskDao.closeQuietly();
 		}
 

@@ -2,6 +2,7 @@ package com.mypomodoro;
 
 import java.text.SimpleDateFormat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -9,29 +10,68 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.mypomodoro.data.Task;
+import com.mypomodoro.db.PomodoroDatabaseHelper;
+import com.mypomodoro.db.TaskDao;
+
 public class PomodoroTimerActivity extends PomodoroActivity {
 	private static final int SECOND = 1000;
 	private static final int MINUTES = 60 * SECOND;
 	private static final long POMODORO_LENGTH = 25 * MINUTES;
-	private TextView text;
+	private static final long POMODORO_SHORT_BREAK_LENGTH = 5 * MINUTES;
+	private static final long POMODORO_LONG_BREAK_LENGTH = POMODORO_SHORT_BREAK_LENGTH * 5;
+
+	private TextView taskName;
+	private TextView timerText;
 	private long time = POMODORO_LENGTH;
 	private final Handler handler = new Handler();
 	private Button stopButton;
 	private Button startButton;
 
-	private void updateTimer() {
-		text.setText(format.format(time));
+	private boolean inpomodoro;
+
+	public boolean isInPomodoro() {
+		return inpomodoro;
 	}
-	
+
+	private void updateTimer() {
+		timerText.setText(format.format(time));
+	}
+
+	int i = 0;
+
 	private final Runnable runnable = new Runnable() {
 		@Override
 		public void run() {
-			time -= SECOND;
-			updateTimer();
-			handler.postDelayed(this, SECOND);
+			if (time >= 1) {
+				time -= SECOND;
+				updateTimer();
+				handler.postDelayed(this, SECOND);
+			} else {
+				if (isInPomodoro()) {
+					if (i > 3) {
+						goInLongBreak();
+						i = 0;
+					} else {
+						i++;
+						goInShortBreak();
+					}
+					inpomodoro = false;
+				} else {
+					inpomodoro = true;
+					goInPomodoro();
+				}
+			}
 		}
 
-		
+		private void goInShortBreak() {
+			time = POMODORO_SHORT_BREAK_LENGTH;
+		}
+
+		private void goInLongBreak() {
+			time = POMODORO_LONG_BREAK_LENGTH;
+		}
+
 	};
 
 	private static final SimpleDateFormat format = new SimpleDateFormat("mm:ss");
@@ -41,8 +81,8 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		text = (TextView) findViewById(R.id.pomodoro_timer);
-		
+		timerText = (TextView) findViewById(R.id.pomodoro_timer);
+		taskName = (TextView) findViewById(R.id.pomodoro_task_name);
 		startButton = (Button) findViewById(R.id.start);
 		startButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -61,13 +101,40 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 			}
 		});
 	}
-	
-	private void canStart(boolean canStart){
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			int taskId = extras.getInt(SheetsActivity.TASK_ID);
+			PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(this);
+			TaskDao taskDao = new TaskDao(helper);
+			try {
+				Task task = taskDao.load(taskId);
+				taskName.setText(task.getName());
+			} finally {
+				helper.close();
+				taskDao.closeQuietly();
+			}
+		}else{
+			//TODO: Try to get the activity from last time from the storage.
+		}
+	}
+
+	private void canStart(boolean canStart) {
 		startButton.setEnabled(canStart);
 		stopButton.setEnabled(!canStart);
 	}
-	
-	private void goInPomodoro(){
+
+	private void goInPomodoro() {
+		time = POMODORO_LENGTH;
 		handler.post(runnable);
 		canStart(false);
 	}

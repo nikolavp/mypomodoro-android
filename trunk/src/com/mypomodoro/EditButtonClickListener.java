@@ -2,13 +2,13 @@ package com.mypomodoro;
 
 import java.util.Date;
 
-import com.mypomodoro.data.Task;
-import com.mypomodoro.db.PomodoroDatabaseHelper;
-import com.mypomodoro.db.TaskDao;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
+
+import com.mypomodoro.data.Task;
+import com.mypomodoro.db.PomodoroDatabaseHelper;
+import com.mypomodoro.db.TaskDao;
 
 public class EditButtonClickListener implements OnClickListener {
 	private final EditForm form;
@@ -49,6 +49,7 @@ public class EditButtonClickListener implements OnClickListener {
 					.show();
 			form.clear();
 		} finally {
+			helper.close();
 			taskDao.closeQuietly();
 		}
 	}
