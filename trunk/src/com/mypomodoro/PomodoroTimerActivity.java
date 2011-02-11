@@ -176,6 +176,7 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
+		helper.close();
+		taskDao.closeQuietly();
 	}
 }
