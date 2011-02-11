@@ -1,11 +1,11 @@
 package com.mypomodoro;
 
 
-import com.mypomodoro.menu.PomodoroMenu;
-
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.mypomodoro.menu.PomodoroMenu;
 
 /**
  * An abstract class to contain the logic for pomodoro menu setup. This menu is
@@ -14,7 +14,7 @@ import android.view.MenuItem;
  * @author nikolavp
  * 
  */
-abstract class PomodoroActivity extends Activity {
+public abstract class PomodoroActivity extends Activity {
 	private PomodoroMenu pomodoroMenu;
 
 	@Override
