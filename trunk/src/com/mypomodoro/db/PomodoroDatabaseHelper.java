@@ -12,10 +12,10 @@ public class PomodoroDatabaseHelper extends SQLiteOpenHelper {
 	public static final String CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME + "( "
 			+ Task._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ Task.NAME + " TEXT NOT NULL, "
-			+ "type INTEGER NOT NULL, "
-			+ "dealine INTEGER, "
+			+ Task.TYPE + " VARCHAR(10) NOT NULL, "
+			+ Task.DEADLINE + " INTEGER, "
 			+ "date_created INTEGER NOT NULL, "
-			+ "estimated INTEGER " + ");";
+			+ Task.ESTIMATED_POMODOROS + " INTEGER " + ");";
 	public static final String DATABASE_NAME = "mypomodoro";
 
 	public PomodoroDatabaseHelper(Context context) {

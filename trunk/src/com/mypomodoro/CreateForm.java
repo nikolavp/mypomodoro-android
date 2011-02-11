@@ -6,17 +6,23 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewStub;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.AdapterView.OnItemSelectedListener;
+
+import com.mypomodoro.data.TaskType;
 
 public class CreateForm extends PomodoroActivity {
 	EditText nameField;
 	EditText estimatedPomodorosField;
 	EditText deadlineField;
-
+	String type = TaskType.NORMAL.toString();
+	
 	private static int DATE_PICKER_DIALOG = 0;
 
 	private final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -37,7 +43,7 @@ public class CreateForm extends PomodoroActivity {
 				.append(calendar.get(Calendar.MONTH) + 1).append("-")
 				.append(calendar.get(Calendar.YEAR)).append(""));
 	}
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,6 +52,19 @@ public class CreateForm extends PomodoroActivity {
 		((ViewStub) findViewById(R.id.create_button_stub)).inflate();
 
 		Button createButton = (Button) findViewById(R.id.create_button);
+		Spinner typeSpinner = (Spinner) findViewById(R.id.task_type_spinner);
+		typeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int pos, long id) {
+				type = (String) parent.getItemAtPosition(pos);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
 		nameField = (EditText) findViewById(R.id.task_name);
 		deadlineField = (EditText) findViewById(R.id.task_deadline_date);
 		deadlineField.setOnClickListener(new OnClickListener() {
