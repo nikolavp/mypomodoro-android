@@ -164,6 +164,20 @@ public class TaskDao implements Closeable {
 	}
 
 	/**
+	 * Checks if a task with the give id exist in the database.
+	 * 
+	 * @param taskId
+	 *            the task id.
+	 * @return true if the task exist and false otherwise.
+	 */
+	public boolean exist(int taskId) {
+		Cursor cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME,
+				new String[] { Task._ID }, Task._ID + " = " + taskId, null,
+				null, null, null);
+		return cursor.getCount() > 0;
+	}
+
+	/**
 	 * Close the dao without throwing exceptions to the caller.
 	 */
 	public void closeQuietly() {
