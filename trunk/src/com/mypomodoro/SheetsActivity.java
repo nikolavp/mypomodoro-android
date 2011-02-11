@@ -101,10 +101,14 @@ public class SheetsActivity extends PomodoroActivity implements
 		Log.i(SheetsActivity.class.getName(), "Refreshing tab " + tabTag);
 	}
 
+	private void refreshCurrentTab() {
+		refreshTab(host.getCurrentTabTag());
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		refreshTab(host.getCurrentTabTag());
+		refreshCurrentTab();
 	}
 
 	/**
@@ -187,9 +191,9 @@ public class SheetsActivity extends PomodoroActivity implements
 	 */
 	private static class ItemAction implements OnClickListener {
 		private final int id;
-		private final Context context;
+		private final SheetsActivity context;
 
-		public ItemAction(Context context, int id) {
+		public ItemAction(SheetsActivity context, int id) {
 			this.id = id;
 			this.context = context;
 		}
@@ -205,11 +209,11 @@ public class SheetsActivity extends PomodoroActivity implements
 						PomodoroTimerActivity.class);
 			} else if (which == 2) {
 				fireIntent = false;
-
 				PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(
 						context);
 				TaskDao taskDao = new TaskDao(helper);
 				taskDao.delete(id);
+				context.refreshCurrentTab();
 			}
 			if (fireIntent) {
 				intent.putExtra(TASK_ID, id);
