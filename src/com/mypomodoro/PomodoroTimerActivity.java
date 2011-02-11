@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -21,13 +22,13 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 	private static final int SECOND = 1000;
 	private static final int MINUTES = 60 * SECOND;
 	private static final long POMODORO_LENGTH = 25 * MINUTES;
-//	private static final long POMODORO_LENGTH = 1 * MINUTES;
+	// private static final long POMODORO_LENGTH = 1 * MINUTES;
 	private static final long POMODORO_SHORT_BREAK_LENGTH = 5 * MINUTES;
 	private static final long POMODORO_LONG_BREAK_LENGTH = POMODORO_SHORT_BREAK_LENGTH * 5;
 
 	PomodoroDatabaseHelper helper;
 	TaskDao taskDao;
-	
+
 	private TextView taskName;
 	private TextView timerText;
 	private long time = POMODORO_LENGTH;
@@ -88,10 +89,10 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
+
 		helper = new PomodoroDatabaseHelper(this);
 		taskDao = new TaskDao(helper);
-		
+
 		timerText = (TextView) findViewById(R.id.pomodoro_timer);
 		taskName = (TextView) findViewById(R.id.pomodoro_task_name);
 		startButton = (Button) findViewById(R.id.start);
@@ -123,14 +124,18 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 		if (extras != null) {
 			int otherTaskIdId = extras.getInt(SheetsActivity.TASK_ID);
-			if(currentTaskId != otherTaskIdId && isInPomodoro()){
-				Toast.makeText(this, getString(R.string.double_tasks_error), 3000).show();
+			if (currentTaskId != otherTaskIdId && isInPomodoro()) {
+				Toast.makeText(this, getString(R.string.double_tasks_error),
+						3000).show();
 				return;
-			}else{
+			} else {
 				currentTaskId = otherTaskIdId;
 			}
 		} else {
 			currentTaskId = preferences.getInt(SheetsActivity.TASK_ID, -1);
+		}
+		if (!taskDao.exist(currentTaskId)) {
+			currentTaskId = -1;
 		}
 		if (currentTaskId != -1) {
 			PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(this);
@@ -149,8 +154,8 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		startButton.setEnabled(canStart);
 		stopButton.setEnabled(!canStart);
 	}
-	
-	private void voidPomodoro(){
+
+	private void voidPomodoro() {
 		handler.removeCallbacks(runnable);
 		time = POMODORO_LENGTH;
 		updateTimer();
@@ -172,7 +177,7 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		edit.putInt(SheetsActivity.TASK_ID, currentTaskId);
 		edit.commit();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
