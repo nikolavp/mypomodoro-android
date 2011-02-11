@@ -4,61 +4,49 @@ import java.text.ParseException;
 import java.util.Date;
 
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.mypomodoro.data.Task;
 import com.mypomodoro.db.PomodoroDatabaseHelper;
 import com.mypomodoro.db.TaskDao;
 
-public class EditButtonClickListener implements OnClickListener {
-	private final EditForm form;
+public class EditButtonClickListener extends FormClickListener {
+
 	private final Task task;
 
-	public EditButtonClickListener(Task task, EditForm form) {
-		this.form = form;
+	public EditButtonClickListener(Task task, Form form) {
+		super(form);
 		this.task = task;
 	}
 
 	@Override
 	public void onClick(View v) {
-		int estimatedPomodoros = -1;
-		try {
-			estimatedPomodoros = Integer.parseInt(form.estimatedPomodorosField
-					.getText().toString());
-		} catch (NumberFormatException e) {
-			Toast.makeText(form,
-					form.getString(R.string.invalid_pomodoros_number), 1000)
-					.show();
-			return;
-		}
-		String name = form.nameField.getText().toString();
-		if (name.length() == 0) {
-			Toast.makeText(form, form.getString(R.string.invalid_form_input),
-					1000).show();
-			return;
-		}
-		
-		String deadlineText = form.deadlineField.getText().toString();
-		Date deadline;
-		try {
-			deadline = Dates.DATE_FORMATTER.parse(deadlineText);
-			task.setDeadline(deadline);
-		} catch (ParseException e) {
-			Toast.makeText(form, R.string.invalid_deadline_input, 1000).show();
+		super.onClick(v);
+		if (deadline.length() > 0) {
+			try {
+				Date deadlineDate = Dates.DATE_FORMATTER.parse(deadline);
+				task.setDeadline(deadlineDate);
+			} catch (ParseException e) {
+				Toast.makeText(form, R.string.invalid_deadline_input, 1000)
+						.show();
+				return;
+			}
 		}
 		task.setEstimatedPomodoros(estimatedPomodoros);
 		task.setName(name);
-
+		task.setType(type);
+		
 		PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(form);
 		TaskDao taskDao = new TaskDao(helper);
 		try {
 			taskDao.update(task);
-			Toast.makeText(form, form.getString(R.string.activity_edited), 1000)
-					.show();
+			Toast
+					.makeText(form, form.getString(R.string.activity_edited),
+							1000).show();
 		} finally {
 			helper.close();
 			taskDao.closeQuietly();
 		}
+		Activities.fireActivityClass(form, SheetsActivity.class);
 	}
 }
