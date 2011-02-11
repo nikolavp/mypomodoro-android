@@ -44,7 +44,7 @@ public class TaskDao implements Closeable {
 	 */
 	public void save(Task task) {
 		insertStatement.bindString(1, task.getName());
-		insertStatement.bindLong(2, task.getType().ordinal());
+		insertStatement.bindString(2, task.getType().toString());
 		if (task.getDeadline() == null) {
 			insertStatement.bindNull(3);
 		} else {
@@ -66,8 +66,8 @@ public class TaskDao implements Closeable {
 		try {
 			cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME, new String[] {
 					Task.NAME, Task.DEADLINE, Task.TYPE,
-					Task.ESTIMATED_POMODOROS }, Task._ID + " = " + taskID, null, null,
-					null, null);
+					Task.ESTIMATED_POMODOROS }, Task._ID + " = " + taskID,
+					null, null, null, null);
 			if (cursor != null) {
 				cursor.moveToFirst();
 			}
@@ -75,12 +75,12 @@ public class TaskDao implements Closeable {
 			int estimated = cursor.getInt(cursor
 					.getColumnIndex(Task.ESTIMATED_POMODOROS));
 			String name = cursor.getString(cursor.getColumnIndex(Task.NAME));
-			int type = cursor.getInt(cursor.getColumnIndex(Task.TYPE));
+			String type = cursor.getString(cursor.getColumnIndex(Task.TYPE));
 			long deadline = cursor
 					.getLong(cursor.getColumnIndex(Task.DEADLINE));
 
 			task.setName(name);
-			task.setType(getType(type));
+			task.setType(TaskType.valueOf(type.toUpperCase()));
 			task.setEstimatedPomodoros(estimated);
 			Calendar deadlineCalendar = Calendar.getInstance();
 			deadlineCalendar.setTimeInMillis(deadline);
@@ -90,16 +90,6 @@ public class TaskDao implements Closeable {
 			if (cursor != null) {
 				cursor.close();
 			}
-		}
-	}
-
-	private TaskType getType(int type) {
-		if (type == 0) {
-			return TaskType.NORMAL;
-		} else if (type == 1) {
-			return TaskType.URGENT;
-		} else {
-			return TaskType.UNPLANNED;
 		}
 	}
 

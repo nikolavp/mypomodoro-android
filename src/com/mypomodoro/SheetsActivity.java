@@ -61,8 +61,8 @@ public class SheetsActivity extends PomodoroActivity implements
 		SQLiteDatabase db = helper.getReadableDatabase();
 		try {
 			Cursor cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME,
-					new String[] { Task._ID, Task.NAME }, "type = "
-							+ type.ordinal(), null, null, null, null);
+					new String[] { Task._ID, Task.NAME }, "type = '"
+							+ type.toString() + "'", null, null, null, null);
 
 			String[] from = new String[] { "name" };
 			int[] to = new int[] { R.id.task_item_name };

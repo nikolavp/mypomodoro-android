@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.mypomodoro.data.Task;
+import com.mypomodoro.data.TaskType;
 import com.mypomodoro.db.PomodoroDatabaseHelper;
 import com.mypomodoro.db.TaskDao;
 
@@ -40,11 +41,13 @@ public class CreateButtonClickListener implements OnClickListener {
 					1000).show();
 			return;
 		}
+		String deadline = form.deadlineField.getText().toString();
+		
 
 		Task task = new Task();
+		task.setType(TaskType.valueOf(form.type.toUpperCase()));
 		task.setDateCreated(new Date());
 
-		String deadline = form.deadlineField.getText().toString();
 
 		if (deadline.length() != 0) {
 			try {
