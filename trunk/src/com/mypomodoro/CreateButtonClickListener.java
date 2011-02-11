@@ -1,6 +1,5 @@
 package com.mypomodoro;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import android.view.View;
@@ -25,22 +24,11 @@ public class CreateButtonClickListener extends FormClickListener {
 	public void onClick(View arg0) {
 		super.onClick(arg0);
 		Task task = new Task();
-		task.setType(type);
 		task.setDateCreated(new Date());
 
-		if (deadline.length() != 0) {
-			try {
-				task.setDeadline(Dates.DATE_FORMATTER.parse(deadline));
-			} catch (ParseException e) {
-				Toast.makeText(form,
-						form.getString(R.string.invalid_deadline_input), 1000)
-						.show();
-				return;
-			}
+		if (!populateTask(task)) {
+			return;
 		}
-		task.setEstimatedPomodoros(estimatedPomodoros);
-		task.setName(name);
-		task.setType(type);
 
 		saveTask(task);
 
