@@ -22,6 +22,7 @@
 	<string name="normal_type">Normal</string>
 	<string name="unplanned_type">Unplanned</string>
 	<string name="set_for_pomodoro">Set as pomodoro task</string>
+	<string name="delete_pomodoro">Delete pomodoro</string>
 	<string name="cancel">Cancel</string>
 	<string name="item_clicked_action_title">What to do with the clicked item</string>
 	<string name="start">Start</string>

@@ -3,6 +3,7 @@
 	<string-array name="item_selected_action">
 		<item>@string/edit</item>
 		<item>@string/set_for_pomodoro</item>
+		<item>@string/delete_pomodoro</item>
 	</string-array>
 	<string-array name="task_type_array">
 		<item>@string/normal_type</item>
