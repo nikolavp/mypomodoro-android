@@ -1,6 +1,7 @@
 package com.mypomodoro;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -11,7 +12,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 
+import com.mypomodoro.data.Task;
 import com.mypomodoro.db.PomodoroDatabaseHelper;
 import com.mypomodoro.db.TaskDao;
 
@@ -49,6 +52,8 @@ public class EditForm extends PomodoroActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		Bundle intentExtras = getIntent().getExtras();
 		setContentView(R.layout.form);
 		((ViewStub) findViewById(R.id.edit_button_stub)).inflate();
 
@@ -61,10 +66,22 @@ public class EditForm extends PomodoroActivity {
 				showDialog(DATE_PICKER_DIALOG);
 			}
 		});
+		Spinner typeSpinner = (Spinner) findViewById(R.id.task_type_spinner);
 		estimatedPomodorosField = (EditText) findViewById(R.id.task_estimated_pomodoros);
 		createButton.setOnClickListener(new EditButtonClickListener(this));
 
-		populateFields();
+		PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(this);
+		
+		TaskDao taskDao = new TaskDao(helper);
+		Task task = taskDao.load(intentExtras.getInt(SheetsActivity.TASK_ID));
+
+		nameField.setText(task.getName());
+		Date deadline = task.getDeadline();
+		if (deadline != null) {
+			deadlineField.setText(Dates.DATE_FORMATTER.format(deadline));
+		}
+		estimatedPomodorosField.setText(""+task.getEstimatedPomodoros());
+		typeSpinner.setSelection(task.getType().ordinal());
 	}
 
 	void clear() {
@@ -84,8 +101,4 @@ public class EditForm extends PomodoroActivity {
 		return null;
 	}
 
-	void populateFields() {
-		PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(this);
-		TaskDao taskDao = new TaskDao(helper);
-	}
 }

@@ -84,9 +84,12 @@ public class TaskDao implements Closeable {
 			task.setName(name);
 			task.setType(TaskType.valueOf(type.toUpperCase()));
 			task.setEstimatedPomodoros(estimated);
-			Calendar deadlineCalendar = Calendar.getInstance();
-			deadlineCalendar.setTimeInMillis(deadline);
-			task.setDeadline(deadlineCalendar.getTime());
+			//SQLite can't give us NULL here so it will rollback to 0
+			if (deadline != 0) {
+				Calendar deadlineCalendar = Calendar.getInstance();
+				deadlineCalendar.setTimeInMillis(deadline);
+				task.setDeadline(deadlineCalendar.getTime());
+			}
 			return task;
 		} finally {
 			if (cursor != null) {

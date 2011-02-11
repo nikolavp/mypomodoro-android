@@ -41,9 +41,10 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		timerText.setText(format.format(time));
 	}
 
-	int i = 0;
-
+	
 	private final Runnable runnable = new Runnable() {
+		int i = 0;
+
 		@Override
 		public void run() {
 			if (time >= 1) {
@@ -111,7 +112,6 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 		setIntent(intent);
 	}
 
-
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -147,8 +147,8 @@ public class PomodoroTimerActivity extends PomodoroActivity {
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+	protected void onPause() {
+		super.onPause();
 		Editor edit = getPreferences(MODE_PRIVATE).edit();
 		edit.putInt(SheetsActivity.TASK_ID, currentTaskId);
 		edit.commit();
