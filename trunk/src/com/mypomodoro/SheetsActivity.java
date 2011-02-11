@@ -23,6 +23,7 @@ import android.widget.TabHost.TabSpec;
 import com.mypomodoro.data.Task;
 import com.mypomodoro.data.TaskType;
 import com.mypomodoro.db.PomodoroDatabaseHelper;
+import com.mypomodoro.db.TaskDao;
 
 public class SheetsActivity extends PomodoroActivity implements
 		TabContentFactory {
@@ -114,8 +115,8 @@ public class SheetsActivity extends PomodoroActivity implements
 	 */
 	private SimpleCursorAdapter getSheetAdapter(TaskType type) {
 		Cursor cursor = db.query(PomodoroDatabaseHelper.TABLE_NAME,
-				new String[] { Task._ID, Task.NAME }, "type = '"
-						+ type.toString() + "'", null, null, null, null);
+				new String[] { Task._ID, Task.NAME },
+				"type = '" + type.toString() + "'", null, null, null, null);
 		Log.d("database", cursor.getCount() + " records loaded from database.");
 		startManagingCursor(cursor);
 
@@ -162,8 +163,7 @@ public class SheetsActivity extends PomodoroActivity implements
 			String[] items = getResources().getStringArray(
 					R.array.item_selected_action);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder
-					.setTitle(getString(R.string.item_clicked_action_title))
+			builder.setTitle(getString(R.string.item_clicked_action_title))
 					.setItems(items, new ItemAction(this, args.getInt(TASK_ID)))
 					.setNegativeButton(getString(R.string.cancel),
 							new OnClickListener() {
@@ -197,16 +197,27 @@ public class SheetsActivity extends PomodoroActivity implements
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			Intent intent = null;
+			boolean fireIntent = true;
 			if (which == 0) {
 				intent = new Intent(context, EditForm.class);
 			} else if (which == 1) {
-				intent = Activities.getIntentForClass(context, PomodoroTimerActivity.class);
+				intent = Activities.getIntentForClass(context,
+						PomodoroTimerActivity.class);
+			} else if (which == 2) {
+				fireIntent = false;
+
+				PomodoroDatabaseHelper helper = new PomodoroDatabaseHelper(
+						context);
+				TaskDao taskDao = new TaskDao(helper);
+				taskDao.delete(id);
 			}
-			intent.putExtra(TASK_ID, id);
-			context.startActivity(intent);
+			if (fireIntent) {
+				intent.putExtra(TASK_ID, id);
+				context.startActivity(intent);
+			}
 		}
 	};
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
