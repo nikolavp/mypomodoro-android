@@ -136,6 +136,20 @@ public class TaskDao implements Closeable {
 	}
 
 	/**
+	 * Deletes a task based on it's id. The id should be a valid id in the
+	 * database.
+	 * 
+	 * @param taskId
+	 *            the id of the task in the database.
+	 * @return true on success and false otherwise.
+	 */
+	public boolean delete(int taskId) {
+		db.delete(PomodoroDatabaseHelper.TABLE_NAME, Task._ID + " = " + taskId,
+				null);
+		return true;
+	}
+
+	/**
 	 * Increment the number of pomodoros associated with this task.
 	 * 
 	 * @param taskId
